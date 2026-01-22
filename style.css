@@ -1,62 +1,143 @@
+/* Reset dasar */
+* {
+  box-sizing: border-box;
+}
+
 body {
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #4f46e5, #6366f1);
-  color: #fff;
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  margin: 0;
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  transition: background 0.3s ease;
 }
 
-.container {
-  background: rgba(0, 0, 0, 0.25);
-  padding: 30px 40px;
-  border-radius: 12px;
-  width: 320px;
+/* Mode gelap */
+body.dark {
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+}
+
+/* Card utama */
+.app {
+  width: 100%;
+  max-width: 360px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 16px;
+  padding: 24px 22px 28px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
   text-align: center;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* Mode gelap card */
+body.dark .app {
+  background: rgba(15, 23, 42, 0.85);
+  color: #fff;
+}
+
+/* Header */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 h1 {
-  margin-bottom: 10px;
-  font-size: 24px;
+  margin: 0;
+  font-size: 22px;
 }
 
-p {
-  font-size: 14px;
-  opacity: 0.9;
-}
-
-input {
-  width: 100%;
-  padding: 10px;
-  border-radius: 6px;
+/* Tombol tema */
+#toggleTheme {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
   border: none;
-  margin-top: 15px;
+  cursor: pointer;
+  font-size: 20px;
+  background: #facc15;
+}
+
+/* Subtitle */
+.subtitle {
+  margin-top: 8px;
+  font-size: 14px;
+  opacity: 0.85;
+}
+
+/* Input waktu */
+input {
+  margin-top: 18px;
+  width: 100%;
+  padding: 12px;
   font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
   text-align: center;
 }
 
-button {
-  margin-top: 15px;
+/* Progress bar */
+.progress-container {
+  margin-top: 20px;
   width: 100%;
-  padding: 10px;
-  border: none;
+  height: 12px;
+  background: #e5e7eb;
   border-radius: 6px;
-  font-size: 16px;
-  cursor: pointer;
+  overflow: hidden;
+}
+
+body.dark .progress-container {
+  background: #374151;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
   background: #22c55e;
-  color: #000;
+  transition: width 0.3s linear;
+}
+
+/* Tombol */
+.buttons {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+button.start {
+  flex: 1;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: none;
+  background: #22c55e;
+  cursor: pointer;
   font-weight: bold;
 }
 
 button.stop {
+  flex: 1;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: none;
   background: #ef4444;
   color: #fff;
+  cursor: pointer;
+  font-weight: bold;
 }
 
+/* Status */
 .status {
-  margin-top: 20px;
+  margin-top: 18px;
   font-size: 16px;
+}
+
+/* Tampilan mobile */
+@media (max-width: 480px) {
+  .app {
+    margin: 0 12px;
+  }
 }
