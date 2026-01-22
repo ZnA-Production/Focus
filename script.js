@@ -1,9 +1,18 @@
 let timer;
 let remainingTime = 0;
+let totalTime = 0;
 
 const startBtn = document.getElementById("startBtn");
 const stopBtn = document.getElementById("stopBtn");
 const status = document.getElementById("status");
+const progressBar = document.getElementById("progressBar");
+const toggleTheme = document.getElementById("toggleTheme");
+
+// Mode gelap / terang
+toggleTheme.addEventListener("click", () => {
+  document.body.classList.toggle("dark");
+  toggleTheme.textContent = document.body.classList.contains("dark") ? "☀️" : "🌙";
+});
 
 // Meminta izin notifikasi
 if ("Notification" in window) {
@@ -19,12 +28,14 @@ startBtn.addEventListener("click", () => {
   }
 
   remainingTime = minutes * 60;
+  totalTime = remainingTime;
+
   startBtn.style.display = "none";
   stopBtn.style.display = "block";
 
   status.textContent = "Mode senyap aktif";
+  progressBar.style.width = "100%";
 
-  // Simulasi mode senyap
   document.title = "🔕 Focus Mode Aktif";
 
   timer = setInterval(() => {
@@ -34,6 +45,9 @@ startBtn.addEventListener("click", () => {
     const sec = remainingTime % 60;
 
     status.textContent = `Sisa waktu: ${min} menit ${sec} detik`;
+
+    const progress = (remainingTime / totalTime) * 100;
+    progressBar.style.width = progress + "%";
 
     if (remainingTime <= 0) {
       clearInterval(timer);
@@ -52,11 +66,11 @@ function selesai(dihentikan = false) {
   stopBtn.style.display = "none";
 
   document.title = "Focus Mode";
+  progressBar.style.width = "0%";
 
   if (!dihentikan) {
     status.textContent = "Waktu habis. Mode senyap selesai";
 
-    // Notifikasi selesai
     if ("Notification" in window && Notification.permission === "granted") {
       new Notification("Focus Mode Selesai", {
         body: "Waktu belajar selesai. Kamu bisa menggunakan gawai kembali."
@@ -68,4 +82,3 @@ function selesai(dihentikan = false) {
     status.textContent = "Mode senyap dihentikan";
   }
 }
-
