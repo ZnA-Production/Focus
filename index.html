@@ -2,19 +2,41 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Focus Mode - Silent Timer</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
-  <div class="container">
-    <h1>Focus Mode</h1>
-    <p>Atur waktu senyap agar tidak terganggu saat belajar</p>
+<body class="light">
 
-    <input type="number" id="minutes" placeholder="Masukkan menit (contoh: 30)" />
+  <div class="app">
+    <header>
+      <h1>Focus Mode</h1>
+      <button id="toggleTheme">🌙</button>
+    </header>
 
-    <button id="startBtn">Mulai Mode Senyap</button>
-    <button id="stopBtn" class="stop" style="display:none;">Hentikan</button>
+    <p class="subtitle">
+      Atur waktu agar tidak terganggu saat belajar atau mengerjakan tugas
+    </p>
 
+    <input 
+      type="number" 
+      id="minutes" 
+      min="1"
+      placeholder="Masukkan waktu (menit)"
+    />
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Tombol -->
+    <div class="buttons">
+      <button id="startBtn" class="start">Mulai</button>
+      <button id="stopBtn" class="stop" hidden>Hentikan</button>
+    </div>
+
+    <!-- Status -->
     <div class="status" id="status">Belum aktif</div>
   </div>
 
