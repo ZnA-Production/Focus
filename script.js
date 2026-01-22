@@ -1,84 +1,108 @@
-let timer;
-let remainingTime = 0;
+let timer = null;
 let totalTime = 0;
+let remainingTime = 0;
 
 const startBtn = document.getElementById("startBtn");
 const stopBtn = document.getElementById("stopBtn");
-const status = document.getElementById("status");
+const statusText = document.getElementById("status");
 const progressBar = document.getElementById("progressBar");
 const toggleTheme = document.getElementById("toggleTheme");
 
-// Mode gelap / terang
+// ======================
+// MODE GELAP / TERANG
+// ======================
 toggleTheme.addEventListener("click", () => {
   document.body.classList.toggle("dark");
-  toggleTheme.textContent = document.body.classList.contains("dark") ? "☀️" : "🌙";
+
+  if (document.body.classList.contains("dark")) {
+    toggleTheme.textContent = "☀️";
+  } else {
+    toggleTheme.textContent = "🌙";
+  }
 });
 
-// Meminta izin notifikasi
+// ======================
+// IZIN NOTIFIKASI
+// ======================
 if ("Notification" in window) {
   Notification.requestPermission();
 }
 
+// ======================
+// MULAI TIMER
+// ======================
 startBtn.addEventListener("click", () => {
   const minutes = parseInt(document.getElementById("minutes").value);
 
   if (isNaN(minutes) || minutes <= 0) {
-    alert("Masukkan waktu yang valid (dalam menit)");
+    alert("Masukkan waktu yang valid (minimal 1 menit)");
     return;
   }
 
-  remainingTime = minutes * 60;
-  totalTime = remainingTime;
+  totalTime = minutes * 60;
+  remainingTime = totalTime;
 
-  startBtn.style.display = "none";
-  stopBtn.style.display = "block";
+  startBtn.hidden = true;
+  stopBtn.hidden = false;
 
-  status.textContent = "Mode senyap aktif";
+  statusText.textContent = "Mode senyap aktif";
   progressBar.style.width = "100%";
-
   document.title = "🔕 Focus Mode Aktif";
 
-  timer = setInterval(() => {
-    remainingTime--;
-
-    const min = Math.floor(remainingTime / 60);
-    const sec = remainingTime % 60;
-
-    status.textContent = `Sisa waktu: ${min} menit ${sec} detik`;
-
-    const progress = (remainingTime / totalTime) * 100;
-    progressBar.style.width = progress + "%";
-
-    if (remainingTime <= 0) {
-      clearInterval(timer);
-      selesai();
-    }
-  }, 1000);
+  timer = setInterval(updateTimer, 1000);
 });
 
+// ======================
+// HENTIKAN TIMER
+// ======================
 stopBtn.addEventListener("click", () => {
   clearInterval(timer);
   selesai(true);
 });
 
-function selesai(dihentikan = false) {
-  startBtn.style.display = "block";
-  stopBtn.style.display = "none";
+// ======================
+// UPDATE WAKTU
+// ======================
+function updateTimer() {
+  remainingTime--;
+
+  const minutes = Math.floor(remainingTime / 60);
+  const seconds = remainingTime % 60;
+
+  statusText.textContent = 
+    `Sisa waktu: ${minutes} menit ${seconds} detik`;
+
+  const progress = (remainingTime / totalTime) * 100;
+  progressBar.style.width = progress + "%";
+
+  if (remainingTime <= 0) {
+    clearInterval(timer);
+    selesai(false);
+  }
+}
+
+// ======================
+// SELESAI
+// ======================
+function selesai(dihentikan) {
+  startBtn.hidden = false;
+  stopBtn.hidden = true;
 
   document.title = "Focus Mode";
   progressBar.style.width = "0%";
 
-  if (!dihentikan) {
-    status.textContent = "Waktu habis. Mode senyap selesai";
+  if (dihentikan) {
+    statusText.textContent = "Mode senyap dihentikan";
+    return;
+  }
 
-    if ("Notification" in window && Notification.permission === "granted") {
-      new Notification("Focus Mode Selesai", {
-        body: "Waktu belajar selesai. Kamu bisa menggunakan gawai kembali."
-      });
-    } else {
-      alert("Waktu habis! Mode senyap selesai.");
-    }
+  statusText.textContent = "Waktu habis. Mode senyap selesai";
+
+  if ("Notification" in window && Notification.permission === "granted") {
+    new Notification("Focus Mode Selesai", {
+      body: "Waktu belajar selesai. Kamu bisa menggunakan gawai kembali."
+    });
   } else {
-    status.textContent = "Mode senyap dihentikan";
+    alert("Waktu habis! Mode senyap selesai.");
   }
 }
