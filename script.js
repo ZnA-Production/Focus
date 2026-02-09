@@ -1,108 +1,105 @@
-let timer = null;
+let timer;
 let totalTime = 0;
 let remainingTime = 0;
 
 const startBtn = document.getElementById("startBtn");
-const stopBtn = document.getElementById("stopBtn");
 const statusText = document.getElementById("status");
 const progressBar = document.getElementById("progressBar");
-const toggleTheme = document.getElementById("toggleTheme");
+const app = document.getElementById("app");
 
-// ======================
-// MODE GELAP / TERANG
-// ======================
-toggleTheme.addEventListener("click", () => {
-  document.body.classList.toggle("dark");
+const inputHours = document.getElementById("hours");
+const inputMinutes = document.getElementById("minutes");
+const inputSeconds = document.getElementById("seconds");
 
-  if (document.body.classList.contains("dark")) {
-    toggleTheme.textContent = "☀️";
-  } else {
-    toggleTheme.textContent = "🌙";
+// ==========================
+// FULLSCREEN
+// ==========================
+function enterFullscreen() {
+  if (app.requestFullscreen) {
+    app.requestFullscreen();
+  }
+}
+
+// Paksa tetap fullscreen
+document.addEventListener("fullscreenchange", () => {
+  if (!document.fullscreenElement && remainingTime > 0) {
+    enterFullscreen();
+    alert("Focus Mode aktif! Tidak bisa keluar sebelum waktu habis.");
   }
 });
 
-// ======================
-// IZIN NOTIFIKASI
-// ======================
-if ("Notification" in window) {
-  Notification.requestPermission();
-}
+// Cegah refresh / keluar
+window.addEventListener("beforeunload", (e) => {
+  if (remainingTime > 0) {
+    e.preventDefault();
+    e.returnValue = "";
+  }
+});
 
-// ======================
-// MULAI TIMER
-// ======================
+// ==========================
+// START
+// ==========================
 startBtn.addEventListener("click", () => {
-  const minutes = parseInt(document.getElementById("minutes").value);
+  const h = parseInt(inputHours.value) || 0;
+  const m = parseInt(inputMinutes.value) || 0;
+  const s = parseInt(inputSeconds.value) || 0;
 
-  if (isNaN(minutes) || minutes <= 0) {
-    alert("Masukkan waktu yang valid (minimal 1 menit)");
+  totalTime = (h * 3600) + (m * 60) + s;
+
+  if (totalTime <= 0) {
+    alert("Masukkan waktu yang valid (jam / menit / detik)");
     return;
   }
 
-  totalTime = minutes * 60;
   remainingTime = totalTime;
 
-  startBtn.hidden = true;
-  stopBtn.hidden = false;
+  inputHours.disabled = true;
+  inputMinutes.disabled = true;
+  inputSeconds.disabled = true;
+  startBtn.disabled = true;
 
-  statusText.textContent = "Mode senyap aktif";
-  progressBar.style.width = "100%";
-  document.title = "🔕 Focus Mode Aktif";
+  enterFullscreen();
 
   timer = setInterval(updateTimer, 1000);
 });
 
-// ======================
-// HENTIKAN TIMER
-// ======================
-stopBtn.addEventListener("click", () => {
-  clearInterval(timer);
-  selesai(true);
-});
-
-// ======================
-// UPDATE WAKTU
-// ======================
+// ==========================
+// UPDATE TIMER
+// ==========================
 function updateTimer() {
   remainingTime--;
 
-  const minutes = Math.floor(remainingTime / 60);
+  const hours = Math.floor(remainingTime / 3600);
+  const minutes = Math.floor((remainingTime % 3600) / 60);
   const seconds = remainingTime % 60;
 
-  statusText.textContent = 
-    `Sisa waktu: ${minutes} menit ${seconds} detik`;
+  statusText.textContent =
+    `Sisa waktu: ${hours}j ${minutes}m ${seconds}d`;
 
   const progress = (remainingTime / totalTime) * 100;
   progressBar.style.width = progress + "%";
 
   if (remainingTime <= 0) {
     clearInterval(timer);
-    selesai(false);
+    selesai();
   }
 }
 
-// ======================
+// ==========================
 // SELESAI
-// ======================
-function selesai(dihentikan) {
-  startBtn.hidden = false;
-  stopBtn.hidden = true;
+// ==========================
+function selesai() {
+  statusText.textContent =
+    "Waktu habis. Kamu bebas menggunakan gawai 😊";
 
-  document.title = "Focus Mode";
   progressBar.style.width = "0%";
 
-  if (dihentikan) {
-    statusText.textContent = "Mode senyap dihentikan";
-    return;
-  }
+  inputHours.disabled = false;
+  inputMinutes.disabled = false;
+  inputSeconds.disabled = false;
+  startBtn.disabled = false;
 
-  statusText.textContent = "Waktu habis. Mode senyap selesai";
-
-  if ("Notification" in window && Notification.permission === "granted") {
-    new Notification("Focus Mode Selesai", {
-      body: "Waktu belajar selesai. Kamu bisa menggunakan gawai kembali."
-    });
-  } else {
-    alert("Waktu habis! Mode senyap selesai.");
+  if (document.fullscreenElement) {
+    document.exitFullscreen();
   }
 }
