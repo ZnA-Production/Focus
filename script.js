@@ -11,39 +11,31 @@ const hoursInput = document.getElementById("hours");
 const minutesInput = document.getElementById("minutes");
 const secondsInput = document.getElementById("seconds");
 
-// ===============================
-// FULLSCREEN (WAJIB DARI KLIK USER)
-// ===============================
+const themeToggle = document.getElementById("themeToggle");
+
+// ================= FULLSCREEN =================
 function requestFullScreen() {
-  if (app.requestFullscreen) {
-    app.requestFullscreen();
-  } else if (app.webkitRequestFullscreen) {
-    app.webkitRequestFullscreen(); // Safari
-  }
+  if (app.requestFullscreen) app.requestFullscreen();
+  else if (app.webkitRequestFullscreen) app.webkitRequestFullscreen();
 }
 
-// ===============================
-// START (DIJAMIN JALAN)
-// ===============================
+// ================= START =================
 startBtn.addEventListener("click", () => {
-
   const h = parseInt(hoursInput.value) || 0;
   const m = parseInt(minutesInput.value) || 0;
   const s = parseInt(secondsInput.value) || 0;
 
-  totalTime = (h * 3600) + (m * 60) + s;
+  totalTime = h * 3600 + m * 60 + s;
 
   if (totalTime <= 0) {
     alert("Masukkan waktu yang valid!");
     return;
   }
 
-  // FULLSCREEN HARUS DI SINI
   requestFullScreen();
 
   remainingTime = totalTime;
 
-  // Kunci input
   hoursInput.disabled = true;
   minutesInput.disabled = true;
   secondsInput.disabled = true;
@@ -52,9 +44,7 @@ startBtn.addEventListener("click", () => {
   timer = setInterval(updateTimer, 1000);
 });
 
-// ===============================
-// UPDATE TIMER
-// ===============================
+// ================= TIMER =================
 function updateTimer() {
   remainingTime--;
 
@@ -64,8 +54,7 @@ function updateTimer() {
 
   statusText.textContent = `Sisa waktu: ${h}j ${m}m ${s}d`;
 
-  const progress = (remainingTime / totalTime) * 100;
-  progressBar.style.width = progress + "%";
+  progressBar.style.width = (remainingTime / totalTime) * 100 + "%";
 
   if (remainingTime <= 0) {
     clearInterval(timer);
@@ -73,9 +62,7 @@ function updateTimer() {
   }
 }
 
-// ===============================
-// SELESAI
-// ===============================
+// ================= SELESAI =================
 function selesai() {
   statusText.textContent = "Waktu habis. Fokus selesai ✅";
   progressBar.style.width = "0%";
@@ -89,3 +76,12 @@ function selesai() {
     document.exitFullscreen();
   }
 }
+
+// ================= THEME TOGGLE =================
+themeToggle.addEventListener("click", () => {
+  document.body.classList.toggle("dark");
+  document.body.classList.toggle("light");
+
+  themeToggle.textContent =
+    document.body.classList.contains("dark") ? "☀️" : "🌙";
+});
