@@ -4,21 +4,52 @@
 
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
   height: 100vh;
+  font-family: Arial, sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: background 0.3s, color 0.3s;
+}
+
+/* ===== LIGHT MODE ===== */
+body.light {
   background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: #000;
+}
+
+/* ===== DARK MODE ===== */
+body.dark {
+  background: #0f172a;
+  color: #f8fafc;
 }
 
 .app {
   background: white;
-  padding: 30px;
+  padding: 28px;
   border-radius: 16px;
   width: 100%;
-  max-width: 380px;
+  max-width: 400px;
   text-align: center;
+  transition: background 0.3s;
+}
+
+body.dark .app {
+  background: #1e293b;
+}
+
+/* HEADER */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#themeToggle {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
 }
 
 .subtitle {
@@ -26,33 +57,39 @@ body {
   opacity: 0.8;
 }
 
+/* ===== INPUT WAKTU ===== */
 .time-input {
-  display: flex;
-  gap: 10px;
-  margin-top: 15px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 20px;
 }
 
-.time-input input {
-  flex: 1;
+.time-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.time-box label {
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.time-box input {
   padding: 10px;
   font-size: 14px;
+  text-align: center;
   border-radius: 8px;
   border: 1px solid #ccc;
-  text-align: center;
 }
 
-button {
-  width: 100%;
-  padding: 12px;
-  margin-top: 20px;
-  font-size: 16px;
-  border-radius: 8px;
+body.dark .time-box input {
+  background: #334155;
+  color: white;
   border: none;
-  background: #22c55e;
-  cursor: pointer;
-  font-weight: bold;
 }
 
+/* ===== PROGRESS ===== */
 .progress-container {
   margin-top: 20px;
   width: 100%;
@@ -62,14 +99,36 @@ button {
   overflow: hidden;
 }
 
+body.dark .progress-container {
+  background: #475569;
+}
+
 .progress-bar {
   height: 100%;
   width: 0%;
   background: #22c55e;
+  transition: width 1s linear;
+}
+
+/* ===== BUTTON ===== */
+button#startBtn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 20px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: none;
+  background: #22c55e;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .status {
-  margin-top: 20px;
-  font-size: 16px;
+  margin-top: 18px;
   font-weight: bold;
 }
