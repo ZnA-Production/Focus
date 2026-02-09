@@ -21,16 +21,11 @@ body {
   text-align: center;
 }
 
-h1 {
-  margin-top: 0;
-}
-
 .subtitle {
   font-size: 14px;
   opacity: 0.8;
 }
 
-/* Input jam-menit-detik */
 .time-input {
   display: flex;
   gap: 10px;
@@ -71,18 +66,10 @@ button {
   height: 100%;
   width: 0%;
   background: #22c55e;
-  transition: width 0.3s linear;
 }
 
 .status {
   margin-top: 20px;
   font-size: 16px;
   font-weight: bold;
-}
-
-/* Mobile */
-@media (max-width: 480px) {
-  .app {
-    margin: 0 12px;
-  }
 }
