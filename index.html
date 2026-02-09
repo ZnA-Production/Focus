@@ -3,40 +3,29 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Focus Mode - Silent Timer</title>
+  <title>Focus Mode</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body class="light">
+<body>
 
-  <div class="app">
-    <header>
-      <h1>Focus Mode</h1>
-      <button id="toggleTheme">🌙</button>
-    </header>
+  <div class="app" id="app">
+    <h1>Focus Mode</h1>
+    <p class="subtitle">Aplikasi akan terkunci hingga waktu habis</p>
 
-    <p class="subtitle">
-      Atur waktu agar tidak terganggu saat belajar atau mengerjakan tugas
-    </p>
+    <!-- Input waktu -->
+    <div class="time-input">
+      <input type="number" id="hours" min="0" placeholder="Jam">
+      <input type="number" id="minutes" min="0" placeholder="Menit">
+      <input type="number" id="seconds" min="0" placeholder="Detik">
+    </div>
 
-    <input 
-      type="number" 
-      id="minutes" 
-      min="1"
-      placeholder="Masukkan waktu (menit)"
-    />
-
-    <!-- Progress Bar -->
+    <!-- Progress bar -->
     <div class="progress-container">
       <div class="progress-bar" id="progressBar"></div>
     </div>
 
-    <!-- Tombol -->
-    <div class="buttons">
-      <button id="startBtn" class="start">Mulai</button>
-      <button id="stopBtn" class="stop" hidden>Hentikan</button>
-    </div>
+    <button id="startBtn">Mulai Fokus</button>
 
-    <!-- Status -->
     <div class="status" id="status">Belum aktif</div>
   </div>
 
