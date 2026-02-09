@@ -1,4 +1,4 @@
-let timer;
+let timer = null;
 let totalTime = 0;
 let remainingTime = 0;
 
@@ -7,74 +7,62 @@ const statusText = document.getElementById("status");
 const progressBar = document.getElementById("progressBar");
 const app = document.getElementById("app");
 
-const inputHours = document.getElementById("hours");
-const inputMinutes = document.getElementById("minutes");
-const inputSeconds = document.getElementById("seconds");
+const hoursInput = document.getElementById("hours");
+const minutesInput = document.getElementById("minutes");
+const secondsInput = document.getElementById("seconds");
 
-// ==========================
-// FULLSCREEN
-// ==========================
-function enterFullscreen() {
+// ===============================
+// FULLSCREEN (WAJIB DARI KLIK USER)
+// ===============================
+function requestFullScreen() {
   if (app.requestFullscreen) {
     app.requestFullscreen();
+  } else if (app.webkitRequestFullscreen) {
+    app.webkitRequestFullscreen(); // Safari
   }
 }
 
-// Paksa tetap fullscreen
-document.addEventListener("fullscreenchange", () => {
-  if (!document.fullscreenElement && remainingTime > 0) {
-    enterFullscreen();
-    alert("Focus Mode aktif! Tidak bisa keluar sebelum waktu habis.");
-  }
-});
-
-// Cegah refresh / keluar
-window.addEventListener("beforeunload", (e) => {
-  if (remainingTime > 0) {
-    e.preventDefault();
-    e.returnValue = "";
-  }
-});
-
-// ==========================
-// START
-// ==========================
+// ===============================
+// START (DIJAMIN JALAN)
+// ===============================
 startBtn.addEventListener("click", () => {
-  const h = parseInt(inputHours.value) || 0;
-  const m = parseInt(inputMinutes.value) || 0;
-  const s = parseInt(inputSeconds.value) || 0;
+
+  const h = parseInt(hoursInput.value) || 0;
+  const m = parseInt(minutesInput.value) || 0;
+  const s = parseInt(secondsInput.value) || 0;
 
   totalTime = (h * 3600) + (m * 60) + s;
 
   if (totalTime <= 0) {
-    alert("Masukkan waktu yang valid (jam / menit / detik)");
+    alert("Masukkan waktu yang valid!");
     return;
   }
 
+  // FULLSCREEN HARUS DI SINI
+  requestFullScreen();
+
   remainingTime = totalTime;
 
-  inputHours.disabled = true;
-  inputMinutes.disabled = true;
-  inputSeconds.disabled = true;
+  // Kunci input
+  hoursInput.disabled = true;
+  minutesInput.disabled = true;
+  secondsInput.disabled = true;
   startBtn.disabled = true;
-
-  enterFullscreen();
 
   timer = setInterval(updateTimer, 1000);
 });
 
-// ==========================
+// ===============================
 // UPDATE TIMER
-// ==========================
+// ===============================
 function updateTimer() {
   remainingTime--;
 
-  const hours = Math.floor(remainingTime / 3600);
-  const minutes = Math.floor((remainingTime % 3600) / 60);
-  const seconds = remainingTime % 60;
+  const h = Math.floor(remainingTime / 3600);
+  const m = Math.floor((remainingTime % 3600) / 60);
+  const s = remainingTime % 60;
 
-  statusText.textContent =
-    `Sisa waktu: ${hours}j ${minutes}m ${seconds}d`;
+  statusText.textContent = `Sisa waktu: ${h}j ${m}m ${s}d`;
 
   const progress = (remainingTime / totalTime) * 100;
   progressBar.style.width = progress + "%";
@@ -85,18 +73,16 @@ function updateTimer() {
   }
 }
 
-// ==========================
+// ===============================
 // SELESAI
-// ==========================
+// ===============================
 function selesai() {
-  statusText.textContent =
-    "Waktu habis. Kamu bebas menggunakan gawai 😊";
-
+  statusText.textContent = "Waktu habis. Fokus selesai ✅";
   progressBar.style.width = "0%";
 
-  inputHours.disabled = false;
-  inputMinutes.disabled = false;
-  inputSeconds.disabled = false;
+  hoursInput.disabled = false;
+  minutesInput.disabled = false;
+  secondsInput.disabled = false;
   startBtn.disabled = false;
 
   if (document.fullscreenElement) {
