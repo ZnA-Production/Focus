@@ -13,13 +13,13 @@ const secondsInput = document.getElementById("seconds");
 
 const themeToggle = document.getElementById("themeToggle");
 
-// ================= FULLSCREEN =================
+// FULLSCREEN
 function requestFullScreen() {
   if (app.requestFullscreen) app.requestFullscreen();
   else if (app.webkitRequestFullscreen) app.webkitRequestFullscreen();
 }
 
-// ================= START =================
+// START
 startBtn.addEventListener("click", () => {
   const h = parseInt(hoursInput.value) || 0;
   const m = parseInt(minutesInput.value) || 0;
@@ -44,7 +44,7 @@ startBtn.addEventListener("click", () => {
   timer = setInterval(updateTimer, 1000);
 });
 
-// ================= TIMER =================
+// TIMER
 function updateTimer() {
   remainingTime--;
 
@@ -62,7 +62,7 @@ function updateTimer() {
   }
 }
 
-// ================= SELESAI =================
+// SELESAI
 function selesai() {
   statusText.textContent = "Waktu habis. Fokus selesai ✅";
   progressBar.style.width = "0%";
@@ -77,7 +77,7 @@ function selesai() {
   }
 }
 
-// ================= THEME TOGGLE =================
+// THEME
 themeToggle.addEventListener("click", () => {
   document.body.classList.toggle("dark");
   document.body.classList.toggle("light");
